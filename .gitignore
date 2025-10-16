@@ -1,0 +1,7 @@
+.vscode
+*dataset_subset
+*runs/detect
+*venv
+*dataset
+*videoplayback.mp4
+*yolov8n.pt
