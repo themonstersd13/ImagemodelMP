@@ -1,0 +1,13 @@
+{
+  "name": "detections-ingest",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node insertLog.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "mysql2": "^3.15.2"
+  }
+}

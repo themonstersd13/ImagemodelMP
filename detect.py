@@ -9,7 +9,7 @@ model = YOLO(model_path)
 
 # Open a connection to the webcam (0 is usually the default camera)
 # Or, you can provide a path to a video file like: 'path/to/your/video.mp4'
-video_source = "./videoplayback.mp4" 
+video_source = "./video-samples/s1.mp4" 
 cap = cv2.VideoCapture(video_source)
 
 if not cap.isOpened():

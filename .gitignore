@@ -3,5 +3,6 @@
 *runs/detect
 *venv
 *dataset
-*videoplayback.mp4
+*video-samples
 *yolov8n.pt
+*yolov8m.pt

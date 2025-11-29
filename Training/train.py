@@ -1,31 +1,32 @@
 from ultralytics import YOLO
 
-# Load a pretrained YOLOv8 model
-model = YOLO('yolov8n.pt')
+model = YOLO('yolov8n.pt')  # small, fast model (good baseline for CPU)
 
-# Train the model on the custom dataset
-results = model.train(
+# Stage 1: fast coarse training at smaller imgsz
+model.train(
     data='e:/PROGRAMING/MINiProject/dataset/data.yaml',
-    epochs=20,
-    imgsz=640,
+    epochs=15,
+    imgsz=320,
     batch=8,
-    name='yolov8n_leopard_detection',
-    # device=0,
-    # Augmentation parameters
+    name='yolov8n_leopard_stage1',
+    device='cpu',
     augment=True,
-    hsv_h=0.015,  # hue
-    hsv_s=0.7,  # saturation
-    hsv_v=0.4,  # value
-    degrees=0.0,
-    translate=0.1,
-    scale=0.5,
-    shear=0.0,
-    perspective=0.0,
-    flipud=0.0,
-    fliplr=0.5,
-    mosaic=1.0,
-    mixup=0.0,
+    hsv_h=0.015, hsv_s=0.7, hsv_v=0.4,
+    translate=0.1, scale=0.5, fliplr=0.5, mosaic=1.0,
+    patience=10,  # early stop if val metric doesn't improve
+    workers=2,
 )
 
-print("Training finished.")
-print("Model saved to:", results.save_dir)
+# Stage 2: fine-tune at larger imgsz for better precision (resume training)
+model.train(
+    data='e:/PROGRAMING/MINiProject/dataset/data.yaml',
+    epochs=7,                    # 15 + 7 ~= 22 total
+    imgsz=480,
+    batch=8,
+    name='yolov8n_leopard_stage2',
+    device='cpu',
+    resume=True,
+    augment=True,
+    patience=10,
+    workers=2,
+)
