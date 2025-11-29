@@ -175,10 +175,50 @@ pio device monitor --baud 115200
 - **Purpose:** Train YOLOv8 models using `dataset/data.yaml`.
 - **Typical run (example):**
 ```powershell
+
+## Mobile App — RakshaSetu (React Native)
+- Repo: `https://github.com/SrushtiGarad7/Leopard-Detection-Alert-System`
+- Purpose: Real-time wildlife detection alerts and mapping (focused on Leopard detection). Designed to consume a public SQL-backed API.
+
+### Key Features
+- Real-time Map Tracking: Shows current user location; plots leopard detection markers.
+- Detection List: Sortable list with location, confidence, and time.
+- API Polling: Manual "Refresh Detections" fetch from your SQL API endpoint.
+- Instant Audio Alert: Plays a tone on new data to simulate critical alerts.
+- Responsive UI: React Native components for mobile/web.
+
+### API Integration Setup
+Update the API link in the app to your public endpoint. In `App.js`, set:
+```javascript
 pip install ultralytics
 python .\Training\train.py --data .\dataset\data.yaml --model yolov8n.pt --epochs 50
 ```
 - **Outputs:** saved under `runs/detect/.../weights/best.pt`.
+
+### Required API Response Format
+The endpoint should return a JSON array of objects with:
+- `id`: number/string (e.g., `101`) — unique key.
+- `species`: string (e.g., "Leopard (Panthera pardus)").
+- `location`: object `{ latitude: number, longitude: number }`.
+- `confidence`: number (0.0–1.0) — detection confidence.
+- `timestamp`: string (e.g., "10/25/2025, 10:30:00 PM").
+- `detector_id`: string (e.g., "SQL-Sensor-05").
+- `status`: string (e.g., "New").
+
+If your current backend doesn't yet provide an `/api/logs` endpoint, you can implement a simple read-only API that queries `LogDetections` and maps rows to the above schema.
+
+### Connection Troubleshooting
+- Local IPs (e.g., `http://10.39.22.186:3500/api/logs`) only work on your LAN.
+- Use a public URL via tunneling or deploy to cloud:
+  - ngrok: `ngrok http 3000` to expose your local ESP server/API.
+  - Cloud options: Render, Railway, Fly.io, AWS, Heroku.
+
+### Technical Stack (App)
+- Frontend: React Native
+- State: React Hooks (`useState`, `useEffect`, `useCallback`)
+- Styles: `StyleSheet`
+- Mapping: `react-native-maps` (`MapView`, `Marker`)
+- Data: External SQL API (HTTP GET)
 
 ## End-to-End Flow
 1. Start ESP backend server:
